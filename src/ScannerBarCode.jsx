@@ -66,6 +66,19 @@ const BarcodeScanner = () => {
     };
   }, [handleBarcodeRead, lastBarcode, contador]);
 
+  const getEntradaHoy = async() => {
+    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-hoy');
+    console.log(result_axios.data);
+  }
+  const getEntradaMes = async() => {
+    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-mes');
+    console.log(result_axios.data);
+  }
+  const getEntradaTotal = async() => {
+    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-total');
+    console.log(result_axios.data);
+  }
+
   return (
     <>
       <div className={classBackground}></div>
@@ -86,9 +99,9 @@ const BarcodeScanner = () => {
             }}
           />
           <div className="container_buttons">
-            <button className='btn btn-primary'>Asistencias Hoy</button>
-            <button className='btn btn-primary'>Asistencias Mes</button>
-            <button className='btn btn-primary'>Asistencias Año</button>
+            <button className='btn btn-primary' onClick={getEntradaHoy}>Asistencias Hoy</button>
+            <button className='btn btn-primary' onClick={getEntradaMes}>Asistencias Mes</button>
+            <button className='btn btn-primary' onClick={getEntradaTotal}>Asistencias Total</button>
           </div>
         </div>
       </div>

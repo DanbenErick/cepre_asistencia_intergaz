@@ -5,16 +5,68 @@
 }
 
 /* Estilos generales */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
+.PageLogin {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100%;
+  /* background: linear-gradient(to bottom right, #ff00cc, #333399); */
+}
+
+.container-form {
+  width: 480px;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background: white;
+}
+.container-form input {
+  width: 100%;
+}
+.container-form img {
+  width: 70px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.background-login {
+  display: block;
   width: 100%;
   height: 100vh;
-  margin: 0;
+  position: fixed;
+  z-index: -1;
+  background-image: url('../public/background_1.jpg');
+  background-size: cover;
+  background-position: center;
 }
+
+.background-login::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(43, 79, 116, 0.5);
+  z-index: 1;
+}
+
+@media(width < 481px) {
+  .container-form {
+    width: 100%;
+    padding: 0 20px;
+  }
+  .background-login {
+    display: none;
+  }
+}
+
+
+
+
+
+
 .background {
   position: fixed;
   width: 100%;

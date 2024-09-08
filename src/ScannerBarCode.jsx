@@ -33,7 +33,7 @@ const BarcodeScanner = () => {
           handleBarcodeRead(result);
 
           if (result.text !== lastBarcode) {
-            const result_axios = await axios.post('http://localhost:8004/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+            const result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
 
             if (result_axios.status === 200) {
               setContador(contador + 1);

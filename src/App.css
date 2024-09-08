@@ -21,7 +21,7 @@
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background: white;
 }
-.container-form input {
+.container-form input:not(.form-check-input) {
   width: 100%;
 }
 .container-form img {
@@ -62,13 +62,24 @@
   }
 }
 
+.title-webcam {
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 
-
-
+.container_buttons {
+  padding: 10px 15px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
 
 
 .background {
   position: fixed;
+  z-index: -1;
   width: 100%;
   height: 100vh;
   

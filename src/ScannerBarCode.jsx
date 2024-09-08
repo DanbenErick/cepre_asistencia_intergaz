@@ -33,7 +33,15 @@ const BarcodeScanner = () => {
           handleBarcodeRead(result);
 
           if (result.text !== lastBarcode) {
-            const result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+            let result_axios
+            if(localStorage.getItem('ESTADO_CEPRE') === 'ENTRADA') {
+              result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+            }
+            if(localStorage.getItem('ESTADO_CEPRE') === 'SALIDA') {
+              result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-salida', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+
+            }
+            
 
             if (result_axios.status === 200) {
               setContador(contador + 1);
@@ -62,10 +70,11 @@ const BarcodeScanner = () => {
     <>
       <div className={classBackground}></div>
       <div className="container-webcam">
-        <h1>ASISTENCIA</h1>
-        <h1>CEPRE</h1>
-        <h1>CONTADOR {contador}</h1>
-        <p>DNI: {barcode}</p>
+        <h1 className='title-webcam'>ASISTENCIA CEPRE</h1>
+        <div className="container_buttons" style={{width: '100%'}}>
+          <button className='btn btn-secondary '>Contador {contador}</button>
+          <button className='btn btn-secondary'>DNI {barcode}</button>
+        </div>
         <div>
           <Webcam
             style={{ 'width': '80%', 'max-width': '80%' }}
@@ -76,8 +85,14 @@ const BarcodeScanner = () => {
               facingMode: "environment",
             }}
           />
+          <div className="container_buttons">
+            <button className='btn btn-primary'>Asistencias Hoy</button>
+            <button className='btn btn-primary'>Asistencias Mes</button>
+            <button className='btn btn-primary'>Asistencias Año</button>
+          </div>
         </div>
       </div>
+      
     </>
   );
 };

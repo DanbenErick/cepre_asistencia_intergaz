@@ -14,6 +14,10 @@ const LoginPage = ({ logined, setLogined }) => {
     localStorage.setItem('ESTADO_CEPRE', value);
   }
 
+  React.useEffect(() => {
+    localStorage.setItem('ESTADO_CEPRE', 'ENTRADA')
+  },[])
+
   const autenticado = async () => {
     const result_login = await axios.post(
       "https://cepre-asistencia-3.onrender.com/cepre-login",

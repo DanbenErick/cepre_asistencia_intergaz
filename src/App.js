@@ -1,31 +1,22 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
 import BarcodeScanner from './ScannerBarCode';
 import LoginPage from './Login';
 import { useState } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import OpinionDocentePage from './OpinionDocentePage';
 
 function App() {
   const [logined, setLogined] = useState(false)
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      {
-        logined? <BarcodeScanner /> : <LoginPage logined={logined} setLogined={setLogined} />
-      }
       
+      <Router>
+        <Routes>
+          <Route path='/' element={logined ? <BarcodeScanner /> : <LoginPage logined={logined} setLogined={setLogined} />} />
+          <Route path='/opinion-docente' element={<OpinionDocentePage />} />
+        </Routes>
+      </Router>
         
       
     

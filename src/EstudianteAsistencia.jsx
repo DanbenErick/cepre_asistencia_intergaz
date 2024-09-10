@@ -5,14 +5,20 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { Modal, Button } from 'react-bootstrap';
 const API = process.env.REACT_APP_API_URL
 
-const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
+const COLORS = [
+  '#1B1725',
+  '#345830',
+  '#E8871E',
+  '#226CE0',
+  '#226CE0'
+];
 
 
 const EstudianteAsistencia = () => {
   const [dniEstudiante, setDNIEstudiante] = React.useState()
   const [nombreEstudiante ,setNombreEstudiante] = React.useState()
   const [sustentoPermiso, setSustentoPermiso] = React.useState('')
-  const [dataGraph, setDataGraph] = React.useState({})
+  const [dataGraph, setDataGraph] = React.useState([])
   const [showModal, setShowModal] = React.useState(false);
   const [dataAsistencia, setDataAsistencia] = React.useState([])
 
@@ -25,12 +31,12 @@ const EstudianteAsistencia = () => {
     // alert(dniEstudiante)
     const resp = await axios.get(API + '/cepre-obtener-asisntencia-estudiante?DNI='+dniEstudiante)
     setNombreEstudiante(resp.data.data.NOMBRE_COMPLETO)
-    setDataAsistencia([resp.data.data.TEMPRANO, resp.data.data.TARDE])
+    setDataAsistencia([resp.data.data.TEMPRANO || 0, resp.data.data.TARDE || 0, resp.data.data.FALTAS || 0])
     setDataGraph([
       { name:'Asistencia', value: resp.data.data.TEMPRANO},
       { name:'Tardes', value: resp.data.data.TARDE},
-      { name: 'Faltas', value: 15 },
-      { name: 'Días Faltantes', value: 30 },
+      { name: 'Faltas', value: resp.data.data.FALTAS || 0 },
+      { name: 'Días Faltantes', value: 40 - resp.data.data.TEMPRANO - resp.data.data.TARDE - resp.data.data.FALTAS },
     ])
     // setDataGraph(resp.data.data)
   }
@@ -100,27 +106,43 @@ const EstudianteAsistencia = () => {
         </div>
       </div>
 
-      <h4 className='text-center fw-bold p-2'>{nombreEstudiante}</h4>
-      <div className="container-table p-2">
-        <table class="table  p-2">
-          <thead>
-            <tr>
-              <th scope="col">CONCEPTO</th>
-              <th scope="col">CANTIDAD</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">ASISTENCIA</th>
-              <td>{dataAsistencia[0]}</td>
-            </tr>
-            <tr>
-              <th scope="row">TARDE</th>
-              <td>{dataAsistencia[1]}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {
+        dataGraph.length === 0 
+        ?
+          ''
+        :
+        <>
+        <h4 className='text-center fw-bold p-2'>{nombreEstudiante}</h4>
+        <div className="container-table p-2">
+          <table class="table p-2">
+            <thead>
+              <tr>
+                <th scope="col">CONCEPTO</th>
+                <th scope="col">CANTIDAD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">ASISTENCIA</th>
+                <td>{dataAsistencia[0]}</td>
+              </tr>
+              <tr>
+                <th scope="row">TARDE</th>
+                <td>{dataAsistencia[1]}</td>
+              </tr>
+              <tr>
+                <th scope="row">FALTAS</th>
+                <td>{dataAsistencia[2]}</td>
+              </tr>
+              <tr>
+                <th scope="row">DIAS FALTANTES</th>
+                <td>{40 - dataAsistencia[0] - dataAsistencia[1] - dataAsistencia[2]}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </>
+      }
 
       <ResponsiveContainer width={400} height={400}>
         <PieChart>
@@ -130,12 +152,10 @@ const EstudianteAsistencia = () => {
             cy="50%"
             labelLine={false}
             outerRadius={80}
-            fill="#8884d8"
+            fill="#226CE0"
             dataKey="value"
           >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
+            {dataGraph.map((entry, index) => ( <Cell key={`cell-${index}`} fill={COLORS[index]} />))}
           </Pie>
           <Tooltip />
           <Legend />
@@ -156,7 +176,7 @@ const EstudianteAsistencia = () => {
 
 
       {/* Modal */}
-      <Modal show={showModal} onHide={handleClose}>
+      <Modal className='modal-dialog-centered' show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Solicitud de Permiso</Modal.Title>
         </Modal.Header>

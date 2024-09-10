@@ -2,8 +2,11 @@ import axios from 'axios';
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Webcam from "react-webcam";
 import { BrowserMultiFormatReader } from "@zxing/library";
+import Swal from 'sweetalert2'
 import "./App.css";
 import "./scanner.css";
+import { Modal, Button } from 'react-bootstrap';
+
 const API = process.env.REACT_APP_API_URL
 const BarcodeScanner = () => {
   const webcamRef = useRef(null);
@@ -11,6 +14,9 @@ const BarcodeScanner = () => {
   const [barcode, setBarcode] = useState(null);
   const [contador, setContador] = useState(0);
   const [lastBarcode, setLastBarcode] = useState(null);  // Para evitar múltiples detecciones del mismo código
+  const [showModal, setShowModal] = useState(false)
+  const [dniPermiso ,setDNIPermiso] = useState('')
+  const [dataEstudiantePermiso, setDataEstudiantePermiso] = useState(null)
 
   const handleBarcodeRead = useCallback((result) => {
     if (result && result.text !== lastBarcode) {
@@ -67,17 +73,38 @@ const BarcodeScanner = () => {
   }, [handleBarcodeRead, lastBarcode, contador]);
 
   const getEntradaHoy = async() => {
-    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-hoy');
-    console.log(result_axios.data);
+    window.location.href = `${API}/cepre-asistencia-entrada-hoy`;
   }
   const getEntradaMes = async() => {
-    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-mes');
-    console.log(result_axios.data);
+    window.location.href = `${API}/cepre-asistencia-entrada-mes`;
   }
   const getEntradaTotal = async() => {
-    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-total');
-    console.log(result_axios.data);
+    window.location.href = `${API}/cepre-asistencia-entrada-total`;
   }
+
+  const consultarPermiso = async() => {
+    try {
+      const resp = await axios.get(API + '/cepre-consultar-permiso?DNI=' + dniPermiso)
+      // debugger
+      if(resp && resp.status === 200 && resp.data.ok) {
+        console.log(resp.data)
+        setDataEstudiantePermiso(resp.data.result[0])
+      }else if(resp.data.ok === false) {
+        Swal.fire({
+          icon: 'warning',
+          text: 'El estudiantes no registro permiso'
+        })
+      }
+      else {
+        Swal.fire('Ocurrio un error')
+      }
+    }catch(e) {
+      console.error(e);
+    }
+  }
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <>
@@ -102,10 +129,67 @@ const BarcodeScanner = () => {
             <button className='btn btn-primary' onClick={getEntradaHoy}>Asistencias Hoy</button>
             <button className='btn btn-primary' onClick={getEntradaMes}>Asistencias Mes</button>
             <button className='btn btn-primary' onClick={getEntradaTotal}>Asistencias Total</button>
+            <button className='btn btn-primary' onClick={handleShowModal}>Permisos</button>
           </div>
         </div>
       </div>
       
+
+      {/* Modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Permiso</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-3">
+              <label className="form-label">DNI del Estudiante</label>
+              <input className='form-control' onChange={(e) => setDNIPermiso(e.target.value)} />
+              {/* <textarea className='form-control' rows="4" minLength={100} onChange={(e) => setSustentoPermiso(e.target.value)} required></textarea> */}
+
+              <div className="container-table p-2">
+              {
+                dataEstudiantePermiso != null
+                ?
+                <>
+                  <h4 className='fw-bold text-center p-3'>Informacion de permiso</h4>
+                  <table class="table p-2">
+                    <tbody>
+                      <tr>
+                        <th scope="row">DNI</th>
+                        <td>{dataEstudiantePermiso['DNI']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Estudiante</th>
+                        <td>{dataEstudiantePermiso['NOMBRE_COMPLETO']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Motivo</th>
+                        <td>{dataEstudiantePermiso['SUSTENTO']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Fecha</th>
+                        <td>{new Date(dataEstudiantePermiso['FECHA']).toISOString().split('T')[0] } - {dataEstudiantePermiso['HORA']}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+                :
+                ''
+              }
+
+            </div>
+          </div>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={consultarPermiso}>
+            Consultar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

@@ -1,6 +1,22 @@
 import React from 'react';
-
+import axios from 'axios'
+const API = process.env.REACT_APP_API_URL
 const OpinionDocentePage = () => {
+  const [selectDocente, setSelectDocente] = React.useState([])
+
+  const getData = async() => {
+    try {
+      const url = API + '/cepre-obtener-docentes'
+      const resp = await axios.get(url)
+      setSelectDocente(resp.data.data)
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+  React.useEffect(() => {
+    getData()
+  },[])
+
   return (
     <div>
       <div className="hero  text-center text-md-start p-5" style={{ background: '#273043' }}>
@@ -33,9 +49,11 @@ const OpinionDocentePage = () => {
                 <label className="form-label">Selecciona el Profesor</label>
                 <select className='form-control' required>
                     <option value="">-- Selecciona --</option>
-                    <option value="profesor1">Profesor 1</option>
-                    <option value="profesor2">Profesor 2</option>
-                    <option value="profesor3">Profesor 3</option>
+                    {
+                      selectDocente.map(element => {
+                        return  <option value={element.ID}>{element.NOMBRES} - {element.MATERIA}</option> 
+                      })
+                    }
                 </select>
             </div>
 

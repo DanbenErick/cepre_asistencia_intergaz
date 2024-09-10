@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+const API = process.env.REACT_APP_API_URL
 const LoginPage = ({ logined, setLogined }) => {
   const [estadoAsistencia, setEstadoAsistencia] = useState('SALIDA');
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const LoginPage = ({ logined, setLogined }) => {
 
   const autenticado = async () => {
     const result_login = await axios.post(
-      "https://cepre-asistencia-3.onrender.com/cepre-login",
+      API+"/cepre-login",
       { usuario: formData.usuario, password: formData.password }
     );
     if (result_login && result_login.status === 200 && result_login.data.ok) {

@@ -4,7 +4,7 @@ import Webcam from "react-webcam";
 import { BrowserMultiFormatReader } from "@zxing/library";
 import "./App.css";
 import "./scanner.css";
-
+const API = process.env.REACT_APP_API_URL
 const BarcodeScanner = () => {
   const webcamRef = useRef(null);
   const [classBackground, setClassBackground] = useState("background");
@@ -35,10 +35,10 @@ const BarcodeScanner = () => {
           if (result.text !== lastBarcode) {
             let result_axios
             if(localStorage.getItem('ESTADO_CEPRE') === 'ENTRADA') {
-              result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+              result_axios = await axios.post(API + '/cepre-ingreso', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
             }
             if(localStorage.getItem('ESTADO_CEPRE') === 'SALIDA') {
-              result_axios = await axios.post('https://cepre-asistencia-3.onrender.com/cepre-salida', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
+              result_axios = await axios.post(API + '/cepre-salida', { dni: result.text, responsable: 'bb68fd33-6bcc-11ef-a1c0-9a1cd2c52600' });
 
             }
             
@@ -67,15 +67,15 @@ const BarcodeScanner = () => {
   }, [handleBarcodeRead, lastBarcode, contador]);
 
   const getEntradaHoy = async() => {
-    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-hoy');
+    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-hoy');
     console.log(result_axios.data);
   }
   const getEntradaMes = async() => {
-    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-mes');
+    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-mes');
     console.log(result_axios.data);
   }
   const getEntradaTotal = async() => {
-    const result_axios = await axios.get('https://cepre-asistencia-3.onrender.com/cepre-asistencia-entrada-total');
+    const result_axios = await axios.get(API + '/cepre-asistencia-entrada-total');
     console.log(result_axios.data);
   }
 

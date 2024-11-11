@@ -233,29 +233,33 @@ const AccesoDirectorFichaPage = () => {
 
 
 
+    {
+      dataPersonalPostulante.length > 0 && (
 
-    {/* Modal de react-bootstrap */}
-    <Modal show={showModalIframe} onHide={handleCloseIframe} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>PDF</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {/* iframe embebido en el modal */}
-        <iframe
-          
-          src={`https://admisionundac.com:7000/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.pdf`}
-          title="Iframe Modal"
-          width="100%"
-          height="400px"
-          style={{ border: "none" }}
-        ></iframe>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseIframe}>
-          Cerrar
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      
+      <Modal show={showModalIframe} onHide={handleCloseIframe} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>PDF</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* iframe embebido en el modal */}
+          <iframe
+            
+            src={`https://admisionundac.com:7000/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.pdf`}
+            title="Iframe Modal"
+            width="100%"
+            height="400px"
+            style={{ border: "none" }}
+          ></iframe>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseIframe}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      )
+    }
 
     </>
   )

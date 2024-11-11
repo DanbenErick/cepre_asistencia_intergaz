@@ -43,7 +43,7 @@ const AccesoDirectorFichaPage = () => {
           if (result.text !== lastBarcode) {
             let result_axios
             console.log("Enviando solicitud")
-            result_axios = await axios.get(`https://admisionundac.com:7000/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}}`);
+            result_axios = await axios.get(`https://admisionundac.com:7000/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}`);
             // result_axios = await axios.get(`http://localhost:3500/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}`);
             if(result_axios.status === 200 && result_axios.data != null) {
               setShowModal(true);

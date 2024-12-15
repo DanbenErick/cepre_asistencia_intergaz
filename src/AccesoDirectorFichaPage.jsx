@@ -43,7 +43,7 @@ const AccesoDirectorFichaPage = () => {
           if (result.text !== lastBarcode) {
             let result_axios
             console.log("Enviando solicitud")
-            result_axios = await axios.get(`https://admisionundac.com:7000/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}`);
+            result_axios = await axios.get(`https://9h4rt7sz-3500.use.devtunnels.ms/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}`);
             // result_axios = await axios.get(`http://localhost:3500/input-controls/direccion-dara-fichas?uuid=${result.text}&password=${localStorage.getItem('passwordMentira')}`);
             if(result_axios.status === 200 && result_axios.data != null) {
               setShowModal(true);
@@ -76,7 +76,7 @@ const AccesoDirectorFichaPage = () => {
     // localStorage.setItem('passwordMentira', 'amor-serrano-peruano')
     localStorage.setItem('passwordMentira', inputClaveRef.current.value)
     // const resp = await axios.get(`http://localhost:3500/input-controls/autenticar-lector-qr-director?password=${inputClaveRef.current.value}`)
-    const resp = await axios.get(`https://admisionundac.com:7000/input-controls/autenticar-lector-qr-director?password=${inputClaveRef.current.value}`)
+    const resp = await axios.get(`https://9h4rt7sz-3500.use.devtunnels.ms/input-controls/autenticar-lector-qr-director?password=${inputClaveRef.current.value}`)
     if(resp.status === 200 && resp.data.ok) {
 
       setShowModalCamara(true)
@@ -142,7 +142,7 @@ const AccesoDirectorFichaPage = () => {
             dataPersonalPostulante.length > 0 && (
               <>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Image src={`https://admisionundac.com:7000/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.jpeg`} alt='Foto de postulante' roundedCircle style={{width: '70%', height:'70%'}} />
+                  <Image src={`https://9h4rt7sz-3500.use.devtunnels.ms/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.jpeg`} alt='Foto de postulante' roundedCircle style={{width: '70%', height:'70%'}} />
                 </div>
                 
 
@@ -245,7 +245,7 @@ const AccesoDirectorFichaPage = () => {
           {/* iframe embebido en el modal */}
           <iframe
             
-            src={`https://admisionundac.com:7000/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.pdf`}
+            src={`https://9h4rt7sz-3500.use.devtunnels.ms/${dataPersonalPostulante[0].DNI}/${dataPersonalPostulante[0].DNI}.pdf`}
             title="Iframe Modal"
             width="100%"
             height="400px"
